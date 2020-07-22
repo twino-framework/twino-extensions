@@ -9,4 +9,8 @@
       <ProjectReference Include="..\..\Twino.Extensions.Data\Twino.Extensions.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+    </ItemGroup>
+
 </Project>

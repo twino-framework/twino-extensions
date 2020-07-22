@@ -21,7 +21,7 @@ namespace Sample.Http
             //configuration action is executed before each factory.Create() usage
             container.AddHttpClient(32, httpClient =>
             {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "ey...");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "Token...");
             });
 
             //IHttpClientFactory is injectable
@@ -39,7 +39,7 @@ namespace Sample.Http
             //configuration action is executed before each factory.Create() usage
             container.AddHttpClient("service-a", 16, httpClient =>
             {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "ey...");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "Token-A...");
             });
             
             //for service b
@@ -47,7 +47,7 @@ namespace Sample.Http
             //configuration action is executed before each factory.Create() usage
             container.AddHttpClient("service-b", 8, httpClient =>
             {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "ey...");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "Token-B...");
             });
 
             //IHttpClientFactory is injectable
