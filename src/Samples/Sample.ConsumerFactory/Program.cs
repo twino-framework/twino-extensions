@@ -16,7 +16,7 @@ namespace Sample.ConsumerFactory
             container.AddScoped<ISampleService, SampleService>();
             
             MessageConsumer consumer = MessageConsumer.JsonConsumer();
-            container.AddScopedConsumers(consumer, typeof(Program));
+            container.AddSingletonConsumers(consumer, typeof(Program));
             
             IContainerScope scope = container.CreateScope();
             QueueConsumerA consumerA = await container.Get<QueueConsumerA>(scope);

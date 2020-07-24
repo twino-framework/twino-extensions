@@ -47,7 +47,7 @@ namespace Twino.Extensions.ConsumerFactory
                                                                                  assemblyTypes);
 
             foreach (Type type in consumerTypes)
-                services.AddSingleton(type);
+                services.AddSingleton(type, type);
 
             return services;
         }
