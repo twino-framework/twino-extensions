@@ -6,9 +6,9 @@
         <Product>Twino.Extensions.ConsumerFactory</Product>
         <Description>Twino Client Message Consumer extension for Twino IOC</Description>
         <PackageTags>twino,tmq,message,consumer,channel,direct</PackageTags>
-        <AssemblyVersion>3.3.0</AssemblyVersion>
-        <FileVersion>3.3.0</FileVersion>
-        <PackageVersion>3.3.0</PackageVersion>
+        <AssemblyVersion>3.3.6</AssemblyVersion>
+        <FileVersion>3.3.6</FileVersion>
+        <PackageVersion>3.3.6</PackageVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Authors>Mehmet Helvacıköylü;Emre Hızlı</Authors>
         <PackageProjectUrl>https://github.com/twino-framework/twino-extensions</PackageProjectUrl>
@@ -25,8 +25,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Twino.Client.TMQ" Version="3.3.5" />
-      <PackageReference Include="Twino.Ioc" Version="3.2.7" />
+      <PackageReference Include="Twino.Client.TMQ" Version="3.3.6" />
+      <PackageReference Include="Twino.Ioc" Version="3.3.6" />
     </ItemGroup>
 
 </Project>
