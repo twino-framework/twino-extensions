@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace Sample.Http
     {
         static async Task Main(string[] args)
         {
+            await BasicUsage();
         }
 
         static async Task BasicUsage()
