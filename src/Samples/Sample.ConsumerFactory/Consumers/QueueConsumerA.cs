@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Sample.ConsumerFactory.Models;
 using Sample.ConsumerFactory.Services;
@@ -14,9 +15,10 @@ namespace Sample.ConsumerFactory.Consumers
         {
             _sampleService = sampleService;
         }
-        
+
         public Task Consume(TmqMessage message, ModelA model, TmqClient client)
         {
+            Console.WriteLine("Model A Consumed");
             return Task.CompletedTask;
         }
     }
