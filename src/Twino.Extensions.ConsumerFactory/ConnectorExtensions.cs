@@ -32,11 +32,37 @@ namespace Twino.Extensions.ConsumerFactory
         /// <summary>
         /// Adds Twino connector with configuration
         /// </summary>
+        public static IServiceContainer UseTwinoBus<TIdentifier>(this IServiceContainer services, Action<TwinoConnectorBuilder> config)
+        {
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            config(builder);
+
+            TmqStickyConnector<TIdentifier> connector = builder.Build<TIdentifier>();
+
+            AddConsumersTwino(services, connector, builder);
+            services.AddSingleton(connector);
+            services.AddSingleton<ITwinoBus<TIdentifier>>(connector);
+
+            connector.Run();
+            return services;
+        }
+
+        /// <summary>
+        /// Adds Twino connector with configuration
+        /// </summary>
         public static IServiceCollection UseTwinoBus(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
         {
             return UseTwinoBus(services, services.BuildServiceProvider(), config);
         }
 
+        /// <summary>
+        /// Adds Twino connector with configuration
+        /// </summary>
+        public static IServiceCollection UseTwinoBus<TIdentifier>(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
+        {
+            return UseTwinoBus(services, services.BuildServiceProvider(), config);
+        }
+        
         /// <summary>
         /// Adds Twino connector with configuration
         /// </summary>
@@ -55,6 +81,24 @@ namespace Twino.Extensions.ConsumerFactory
             return services;
         }
 
+        /// <summary>
+        /// Adds Twino connector with configuration
+        /// </summary>
+        public static IServiceCollection UseTwinoBus<TIdentifier>(this IServiceCollection services, IServiceProvider provider, Action<TwinoConnectorBuilder> config)
+        {
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            config(builder);
+
+            TmqStickyConnector<TIdentifier> connector = builder.Build<TIdentifier>();
+
+            AddConsumersMicrosoftDI(services, provider, connector, builder);
+            services.AddSingleton(connector);
+            services.AddSingleton<ITwinoBus<TIdentifier>>(connector);
+
+            connector.Run();
+            return services;
+        }
+        
         private static void AddConsumersTwino(IServiceContainer services, TmqStickyConnector connector, TwinoConnectorBuilder builder)
         {
             foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)

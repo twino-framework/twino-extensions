@@ -25,7 +25,7 @@ namespace Twino.Extensions.ConsumerFactory
         private bool _autoJoin = true;
         private bool _disconnectOnJoinFailure = true;
 
-        private Func<TmqMessage, Type, object> _customConsumer = null;
+        private Func<TmqMessage, Type, object> _customConsumer;
         private readonly List<string> _hosts = new List<string>();
 
         private Action<TmqStickyConnector> _connected;
@@ -257,34 +257,54 @@ namespace Twino.Extensions.ConsumerFactory
         /// <summary>
         /// Builds new TmqStickyConnector with defined properties
         /// </summary>
+        public TmqStickyConnector<TIdentifier> Build<TIdentifier>()
+        {
+            if (_connector != null)
+                return (TmqStickyConnector<TIdentifier>) _connector;
+
+            _connector = new TmqStickyConnector<TIdentifier>(_reconnectInterval, new ConnectorInstanceCreator(_id, _name, _type, _token, _enhance).CreateInstance);
+            ConfigureConnector(_connector);
+            
+            return (TmqStickyConnector<TIdentifier>) _connector;
+        }
+
+        /// <summary>
+        /// Builds new TmqStickyConnector with defined properties
+        /// </summary>
         public TmqStickyConnector Build()
         {
             if (_connector != null)
                 return _connector;
 
-            _connector = new TmqAbsoluteConnector(_reconnectInterval, new ConnectorInstanceCreator(_id, _name, _type, _token, _enhance).CreateInstance);
+            _connector = new TmqStickyConnector(_reconnectInterval, new ConnectorInstanceCreator(_id, _name, _type, _token, _enhance).CreateInstance);
+            ConfigureConnector(_connector);
+            return _connector;
+        }
 
-            _connector.AutoJoinConsumerChannels = _autoJoin;
-            _connector.DisconnectionOnAutoJoinFailure = _disconnectOnJoinFailure;
+        /// <summary>
+        /// Applies configurations on connector
+        /// </summary>
+        private void ConfigureConnector(TmqStickyConnector connector)
+        {
+            connector.AutoJoinConsumerChannels = _autoJoin;
+            connector.DisconnectionOnAutoJoinFailure = _disconnectOnJoinFailure;
 
             if (_useJsonConsumer)
-                _connector.InitJsonReader();
+                connector.InitJsonReader();
             else if (_customConsumer != null)
-                _connector.InitReader(_customConsumer);
+                connector.InitReader(_customConsumer);
 
             foreach (string host in _hosts)
-                _connector.AddHost(host);
+                connector.AddHost(host);
 
             if (_connected != null)
-                _connector.Connected += new ConnectionEventMapper(_connector, _connected).Action;
+                connector.Connected += new ConnectionEventMapper(connector, _connected).Action;
 
             if (_disconnected != null)
-                _connector.Disconnected += new ConnectionEventMapper(_connector, _disconnected).Action;
+                connector.Disconnected += new ConnectionEventMapper(connector, _disconnected).Action;
 
             if (_error != null)
-                _connector.ExceptionThrown += new ExceptionEventMapper(_connector, _error).Action;
-
-            return _connector;
+                connector.ExceptionThrown += new ExceptionEventMapper(connector, _error).Action;
         }
 
         /// <summary>
