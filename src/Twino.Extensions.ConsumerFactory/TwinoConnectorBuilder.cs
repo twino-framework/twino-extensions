@@ -318,6 +318,7 @@ namespace Twino.Extensions.ConsumerFactory
             _disconnected = null;
             _error = null;
             _enhance = null;
+            _hosts.Clear();
             _assembyConsumers.Clear();
             _individualConsumers.Clear();
         }
