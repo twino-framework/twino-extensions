@@ -7,7 +7,7 @@ using Twino.Protocols.TMQ;
 
 namespace Sample.ConsumerFactory.Consumers
 {
-    public class QueueConsumerA : IQueueConsumer<ModelA>
+    public class QueueConsumerA : IDirectConsumer<ModelA>
     {
         private readonly ISampleService _sampleService;
 

@@ -113,7 +113,8 @@ namespace Twino.Extensions.ConsumerFactory
 
             foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
             {
-                connector.Consumer.RegisterConsumer(pair.Item2, () => new TwinoIocConsumerFactory(services, pair.Item1));
+                connector.Consumer.RegisterConsumer(pair.Item2, 
+                                                    () => new TwinoIocConsumerFactory(services, pair.Item1));
                 AddConsumerIntoContainer(services, pair.Item1, pair.Item2);
             }
         }
