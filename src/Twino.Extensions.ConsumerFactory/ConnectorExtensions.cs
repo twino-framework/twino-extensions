@@ -11,6 +11,8 @@ namespace Twino.Extensions.ConsumerFactory
     /// </summary>
     public static class TwinoIocConnectorExtensions
     {
+        #region Twino
+
         /// <summary>
         /// Adds Twino connector with configuration
         /// </summary>
@@ -47,58 +49,6 @@ namespace Twino.Extensions.ConsumerFactory
             return services;
         }
 
-        /// <summary>
-        /// Adds Twino connector with configuration
-        /// </summary>
-        public static IServiceCollection UseTwinoBus(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
-        {
-            return UseTwinoBus(services, services.BuildServiceProvider(), config);
-        }
-
-        /// <summary>
-        /// Adds Twino connector with configuration
-        /// </summary>
-        public static IServiceCollection UseTwinoBus<TIdentifier>(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
-        {
-            return UseTwinoBus(services, services.BuildServiceProvider(), config);
-        }
-        
-        /// <summary>
-        /// Adds Twino connector with configuration
-        /// </summary>
-        public static IServiceCollection UseTwinoBus(this IServiceCollection services, IServiceProvider provider, Action<TwinoConnectorBuilder> config)
-        {
-            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
-            config(builder);
-
-            TmqStickyConnector connector = builder.Build();
-
-            AddConsumersMicrosoftDI(services, provider, connector, builder);
-            services.AddSingleton(connector);
-            services.AddSingleton<ITwinoBus>(connector);
-
-            connector.Run();
-            return services;
-        }
-
-        /// <summary>
-        /// Adds Twino connector with configuration
-        /// </summary>
-        public static IServiceCollection UseTwinoBus<TIdentifier>(this IServiceCollection services, IServiceProvider provider, Action<TwinoConnectorBuilder> config)
-        {
-            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
-            config(builder);
-
-            TmqStickyConnector<TIdentifier> connector = builder.Build<TIdentifier>();
-
-            AddConsumersMicrosoftDI(services, provider, connector, builder);
-            services.AddSingleton(connector);
-            services.AddSingleton<ITwinoBus<TIdentifier>>(connector);
-
-            connector.Run();
-            return services;
-        }
-        
         private static void AddConsumersTwino(IServiceContainer services, TmqStickyConnector connector, TwinoConnectorBuilder builder)
         {
             foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)
@@ -113,28 +63,9 @@ namespace Twino.Extensions.ConsumerFactory
 
             foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
             {
-                connector.Consumer.RegisterConsumer(pair.Item2, 
+                connector.Consumer.RegisterConsumer(pair.Item2,
                                                     () => new TwinoIocConsumerFactory(services, pair.Item1));
                 AddConsumerIntoContainer(services, pair.Item1, pair.Item2);
-            }
-        }
-
-        private static void AddConsumersMicrosoftDI(IServiceCollection services, IServiceProvider provider, TmqStickyConnector connector, TwinoConnectorBuilder builder)
-        {
-            foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)
-            {
-                IEnumerable<Type> types = connector.Consumer
-                                                   .RegisterAssemblyConsumers(() => new MicrosoftDependencyConsumerFactory(provider, pair.Item1.ToLifeTime()),
-                                                                              pair.Item2);
-
-                foreach (Type type in types)
-                    AddConsumerIntoCollection(services, pair.Item1, type);
-            }
-
-            foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
-            {
-                connector.Consumer.RegisterConsumer(pair.Item2, () => new MicrosoftDependencyConsumerFactory(provider, pair.Item1.ToLifeTime()));
-                AddConsumerIntoCollection(services, pair.Item1, pair.Item2);
             }
         }
 
@@ -156,6 +87,63 @@ namespace Twino.Extensions.ConsumerFactory
             }
         }
 
+        #endregion
+
+        #region MS DI
+
+        /// <summary>
+        /// Adds Twino connector with configuration
+        /// </summary>
+        public static IServiceCollection AddTwinoBus(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
+        {
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            config(builder);
+
+            TmqStickyConnector connector = builder.Build();
+
+            AddConsumersMicrosoftDI(services, connector, builder);
+            services.AddSingleton(connector);
+            services.AddSingleton<ITwinoBus>(connector);
+
+            return services;
+        }
+
+        /// <summary>
+        /// Adds Twino connector with configuration
+        /// </summary>
+        public static IServiceCollection AddTwinoBus<TIdentifier>(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
+        {
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            config(builder);
+
+            TmqStickyConnector<TIdentifier> connector = builder.Build<TIdentifier>();
+
+            AddConsumersMicrosoftDI(services, connector, builder);
+            services.AddSingleton(connector);
+            services.AddSingleton<ITwinoBus<TIdentifier>>(connector);
+
+            return services;
+        }
+
+        private static void AddConsumersMicrosoftDI(IServiceCollection services, TmqStickyConnector connector, TwinoConnectorBuilder builder)
+        {
+            foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)
+            {
+                IEnumerable<Type> types = connector.Consumer
+                                                   .RegisterAssemblyConsumers(() => new MicrosoftDependencyConsumerFactory(pair.Item1.ToLifeTime()),
+                                                                              pair.Item2);
+
+                foreach (Type type in types)
+                    AddConsumerIntoCollection(services, pair.Item1, type);
+            }
+
+            foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
+            {
+                connector.Consumer.RegisterConsumer(pair.Item2, () => new MicrosoftDependencyConsumerFactory(pair.Item1.ToLifeTime()));
+                AddConsumerIntoCollection(services, pair.Item1, pair.Item2);
+            }
+        }
+
         private static void AddConsumerIntoCollection(IServiceCollection container, ImplementationType implementationType, Type consumerType)
         {
             switch (implementationType)
@@ -173,6 +161,30 @@ namespace Twino.Extensions.ConsumerFactory
                     break;
             }
         }
+
+        /// <summary>
+        /// Uses twino bus and connects to the server
+        /// </summary>
+        public static IServiceProvider UseTwinoBus(this IServiceProvider provider)
+        {
+            MicrosoftDependencyConsumerFactory.Provider = provider;
+            TmqStickyConnector connector = provider.GetService<TmqStickyConnector>();
+            connector.Run();
+            return provider;
+        }
+
+        /// <summary>
+        /// Uses twino bus and connects to the server
+        /// </summary>
+        public static IServiceProvider UseTwinoBus<TIdentifier>(this IServiceProvider provider)
+        {
+            MicrosoftDependencyConsumerFactory.Provider = provider;
+            TmqStickyConnector<TIdentifier> connector = provider.GetService<TmqStickyConnector<TIdentifier>>();
+            connector.Run();
+            return provider;
+        }
+
+        #endregion
 
         private static ServiceLifetime ToLifeTime(this ImplementationType type)
         {
