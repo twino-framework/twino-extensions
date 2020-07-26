@@ -16,7 +16,7 @@ namespace Twino.Extensions.ConsumerFactory
         /// <summary>
         /// Adds Twino connector with configuration
         /// </summary>
-        public static IServiceContainer UseTwinoBus(this IServiceContainer services, Action<TwinoConnectorBuilder> config)
+        public static ITwinoServiceCollection UseTwinoBus(this ITwinoServiceCollection services, Action<TwinoConnectorBuilder> config)
         {
             TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
             config(builder);
@@ -34,7 +34,7 @@ namespace Twino.Extensions.ConsumerFactory
         /// <summary>
         /// Adds Twino connector with configuration
         /// </summary>
-        public static IServiceContainer UseTwinoBus<TIdentifier>(this IServiceContainer services, Action<TwinoConnectorBuilder> config)
+        public static ITwinoServiceCollection UseTwinoBus<TIdentifier>(this ITwinoServiceCollection services, Action<TwinoConnectorBuilder> config)
         {
             TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
             config(builder);
@@ -49,12 +49,12 @@ namespace Twino.Extensions.ConsumerFactory
             return services;
         }
 
-        private static void AddConsumersTwino(IServiceContainer services, TmqStickyConnector connector, TwinoConnectorBuilder builder)
+        private static void AddConsumersTwino(ITwinoServiceCollection services, TmqStickyConnector connector, TwinoConnectorBuilder builder)
         {
             foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)
             {
                 IEnumerable<Type> types = connector.Consumer
-                                                   .RegisterAssemblyConsumers(() => new TwinoIocConsumerFactory(services, pair.Item1),
+                                                   .RegisterAssemblyConsumers(() => new TwinoIocConsumerFactory((IServiceContainer)services, pair.Item1),
                                                                               pair.Item2);
 
                 foreach (Type type in types)
@@ -64,12 +64,12 @@ namespace Twino.Extensions.ConsumerFactory
             foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
             {
                 connector.Consumer.RegisterConsumer(pair.Item2,
-                                                    () => new TwinoIocConsumerFactory(services, pair.Item1));
+                                                    () => new TwinoIocConsumerFactory((IServiceContainer)services, pair.Item1));
                 AddConsumerIntoContainer(services, pair.Item1, pair.Item2);
             }
         }
 
-        private static void AddConsumerIntoContainer(IServiceContainer container, ImplementationType implementationType, Type consumerType)
+        private static void AddConsumerIntoContainer(ITwinoServiceCollection container, ImplementationType implementationType, Type consumerType)
         {
             switch (implementationType)
             {

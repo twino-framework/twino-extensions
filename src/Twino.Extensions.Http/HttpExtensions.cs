@@ -46,20 +46,18 @@ namespace Twino.Extensions.Http
         /// </summary>
         public static IServiceContainer AddHttpClient(this IServiceContainer services, string name, int poolSize, Action<HttpClient> configureClient)
         {
-            HttpClientFactory factory;
-            ServiceDescriptor descriptor = services.GetDescriptor<HttpClientFactory>();
-            if (descriptor == null)
+            IHttpClientFactory factory;
+            bool found = services.TryGet(out factory);
+            if (found)
             {
                 factory = new HttpClientFactory();
-                services.AddSingleton<IHttpClientFactory>(factory);
+                services.AddSingleton(factory);
             }
-            else
-                factory = (HttpClientFactory)descriptor.Instance;
 
-            factory.AddConfiguration(name, poolSize, configureClient);
+            HttpClientFactory f = (HttpClientFactory) factory;
+            f.AddConfiguration(name, poolSize, configureClient);
 
             return services;
         }
-
     }
 }

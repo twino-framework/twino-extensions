@@ -17,11 +17,11 @@ namespace Twino.Extensions.ConsumerFactory
             _implementationType = implementationType;
         }
 
-        public async Task<object> CreateConsumer(Type consumerType)
+        public Task<object> CreateConsumer(Type consumerType)
         {
             _scope = _implementationType == ImplementationType.Scoped ? _container.CreateScope() : null;
-            object consumer = await _container.Get(consumerType, _scope);
-            return consumer;
+            object consumer = _container.Get(consumerType, _scope);
+            return Task.FromResult(consumer);
         }
 
         public void Consumed(Exception error)
