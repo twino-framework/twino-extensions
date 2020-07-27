@@ -48,7 +48,7 @@ namespace Twino.Extensions.Http
         {
             IHttpClientFactory factory;
             bool found = services.TryGet(out factory);
-            if (found)
+            if (!found)
             {
                 factory = new HttpClientFactory();
                 services.AddSingleton(factory);
