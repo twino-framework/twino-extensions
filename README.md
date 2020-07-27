@@ -4,8 +4,17 @@ Twino Extensions project has useful extensions for twino projects.
 
 ## NuGet Packages
 
+**[Twino Extensions ConsumerFactory](https://www.nuget.org/packages/Twino.Extensions.ConsumerFactory)**<br>
 **[Twino Extensions Http](https://www.nuget.org/packages/Twino.Extensions.Http)**<br>
 **[Twino Extensions Data](https://www.nuget.org/packages/Twino.Extensions.Data)**<br>
+
+
+### Twino Extensions Consumer Factory
+
+Consumer Factory is an extension for connecting Twino MQ easily. It creates a TmqStickyConnector and registers it to service provider. You can get that connector with ITwinoBus service type.
+
+services.UseTwinoBus(cfg => cfg.AddHost("tmq://127.0.0.1:22200")
+                               .AddTransientConsumers(typeof(Program)));
 
 
 ### Twino Extensions Http
@@ -24,7 +33,7 @@ HttpClient pool factory. You can use one pool as default or multiple pools with 
     });
 
     //IHttpClientFactory is injectable
-    IHttpClientFactory factory = await container.Get<IHttpClientFactory>();
+    IHttpClientFactory factory = container.Get<IHttpClientFactory>();
     HttpClient client = factory.Create();
     //use client here
             
@@ -50,7 +59,7 @@ HttpClient pool factory. You can use one pool as default or multiple pools with 
     });
 
     //IHttpClientFactory is injectable
-    IHttpClientFactory factory = await container.Get<IHttpClientFactory>();
+    IHttpClientFactory factory = container.Get<IHttpClientFactory>();
     
     //get for service-a
     HttpClient clientA = factory.Create("service-a");
@@ -85,4 +94,4 @@ Here is a quick example:
     IContainerScope scope = container.CreateScope();
     
     //get db context from pool
-    MyContext context = await container.Get<MyContext>(scope);
+    MyContext context = container.Get<MyContext>(scope);
