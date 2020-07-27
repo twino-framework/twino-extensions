@@ -13,8 +13,8 @@ Twino Extensions project has useful extensions for twino projects.
 
 Consumer Factory is an extension for connecting Twino MQ easily. It creates a TmqStickyConnector and registers it to service provider. You can get that connector with ITwinoBus service type.
 
-services.UseTwinoBus(cfg => cfg.AddHost("tmq://127.0.0.1:22200")
-                               .AddTransientConsumers(typeof(Program)));
+    services.UseTwinoBus(cfg => cfg.AddHost("tmq://127.0.0.1:22200")
+                                   .AddTransientConsumers(typeof(Program)));
 
 
 ### Twino Extensions Http
