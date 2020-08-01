@@ -53,7 +53,7 @@ namespace Twino.Extensions.ConsumerFactory
         {
             foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)
             {
-                IEnumerable<Type> types = connector.Consumer
+                IEnumerable<Type> types = connector.Observer
                                                    .RegisterAssemblyConsumers(() => new TwinoIocConsumerFactory((IServiceContainer)services, pair.Item1),
                                                                               pair.Item2);
 
@@ -63,7 +63,7 @@ namespace Twino.Extensions.ConsumerFactory
 
             foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
             {
-                connector.Consumer.RegisterConsumer(pair.Item2,
+                connector.Observer.RegisterConsumer(pair.Item2,
                                                     () => new TwinoIocConsumerFactory((IServiceContainer)services, pair.Item1));
                 AddConsumerIntoContainer(services, pair.Item1, pair.Item2);
             }
@@ -129,7 +129,7 @@ namespace Twino.Extensions.ConsumerFactory
         {
             foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)
             {
-                IEnumerable<Type> types = connector.Consumer
+                IEnumerable<Type> types = connector.Observer
                                                    .RegisterAssemblyConsumers(() => new MicrosoftDependencyConsumerFactory(pair.Item1.ToLifeTime()),
                                                                               pair.Item2);
 
@@ -139,7 +139,7 @@ namespace Twino.Extensions.ConsumerFactory
 
             foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
             {
-                connector.Consumer.RegisterConsumer(pair.Item2, () => new MicrosoftDependencyConsumerFactory(pair.Item1.ToLifeTime()));
+                connector.Observer.RegisterConsumer(pair.Item2, () => new MicrosoftDependencyConsumerFactory(pair.Item1.ToLifeTime()));
                 AddConsumerIntoCollection(services, pair.Item1, pair.Item2);
             }
         }

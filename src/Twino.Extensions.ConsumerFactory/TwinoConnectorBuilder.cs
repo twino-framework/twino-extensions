@@ -21,11 +21,10 @@ namespace Twino.Extensions.ConsumerFactory
         private string _name = "unnamed";
         private string _token;
         private TimeSpan _reconnectInterval = TimeSpan.FromSeconds(1);
-        private bool _useJsonConsumer = true;
         private bool _autoJoin = true;
         private bool _disconnectOnJoinFailure = true;
+        private IMessageContentSerializer _contentSerializer;
 
-        private Func<TmqMessage, Type, object> _customConsumer;
         private readonly List<string> _hosts = new List<string>();
 
         private Action<TmqStickyConnector> _connected;
@@ -137,27 +136,29 @@ namespace Twino.Extensions.ConsumerFactory
 
         #endregion
 
+        #region Serializers
+
+        /// <summary>
+        /// Uses Newtonsoft library for JSON serializations
+        /// </summary>
+        public TwinoConnectorBuilder UseNewtonsoftJsonSerializer(Newtonsoft.Json.JsonSerializerSettings settings = null)
+        {
+            _contentSerializer = new NewtonsoftContentSerializer(settings);
+            return this;
+        }
+
+        /// <summary>
+        /// Uses System.Text.Json library for JSON serializations
+        /// </summary>
+        public TwinoConnectorBuilder UseSystemJsonSerializer(System.Text.Json.JsonSerializerOptions options = null)
+        {
+            _contentSerializer = new SystemJsonContentSerializer(options);
+            return this;
+        }
+
+        #endregion
+
         #region Consumers
-
-        /// <summary>
-        /// Uses JSON serialization for consuming messages
-        /// </summary>
-        public TwinoConnectorBuilder UseJsonConsumer()
-        {
-            _useJsonConsumer = true;
-            _customConsumer = null;
-            return this;
-        }
-
-        /// <summary>
-        /// Uses custom serialization for consuming messages
-        /// </summary>
-        public TwinoConnectorBuilder UseCustomConsumer(Func<TmqMessage, Type, object> action)
-        {
-            _useJsonConsumer = false;
-            _customConsumer = action;
-            return this;
-        }
 
         /// <summary>
         /// Registers new transient consumer
@@ -264,7 +265,7 @@ namespace Twino.Extensions.ConsumerFactory
 
             _connector = new TmqStickyConnector<TIdentifier>(_reconnectInterval, new ConnectorInstanceCreator(_id, _name, _type, _token, _enhance).CreateInstance);
             ConfigureConnector(_connector);
-            
+
             return (TmqStickyConnector<TIdentifier>) _connector;
         }
 
@@ -281,6 +282,7 @@ namespace Twino.Extensions.ConsumerFactory
             return _connector;
         }
 
+
         /// <summary>
         /// Applies configurations on connector
         /// </summary>
@@ -288,11 +290,8 @@ namespace Twino.Extensions.ConsumerFactory
         {
             connector.AutoJoinConsumerChannels = _autoJoin;
             connector.DisconnectionOnAutoJoinFailure = _disconnectOnJoinFailure;
-
-            if (_useJsonConsumer)
-                connector.InitJsonReader();
-            else if (_customConsumer != null)
-                connector.InitReader(_customConsumer);
+            if (_contentSerializer != null)
+                connector.ContentSerializer = _contentSerializer;
 
             foreach (string host in _hosts)
                 connector.AddHost(host);
@@ -313,7 +312,6 @@ namespace Twino.Extensions.ConsumerFactory
         internal void Dispose()
         {
             _connector = null;
-            _customConsumer = null;
             _connected = null;
             _disconnected = null;
             _error = null;
