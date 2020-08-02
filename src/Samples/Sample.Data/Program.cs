@@ -12,7 +12,7 @@ namespace Sample.Data
 
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             IServiceContainer container = new ServiceContainer();
 
@@ -32,9 +32,9 @@ namespace Sample.Data
 
             //create a scope for using Scoped registrations
             IContainerScope scope = container.CreateScope();
-            
+
             //get db context from pool
-            MyContext context = await container.Get<MyContext>(scope);
+            MyContext context = container.Get<MyContext>(scope);
         }
     }
 }
