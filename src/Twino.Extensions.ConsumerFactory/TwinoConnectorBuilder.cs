@@ -156,6 +156,15 @@ namespace Twino.Extensions.ConsumerFactory
             return this;
         }
 
+        /// <summary>
+        /// Uses custom serializer
+        /// </summary>
+        public TwinoConnectorBuilder UseCustomSerializer(IMessageContentSerializer serializer)
+        {
+            _contentSerializer = serializer;
+            return this;
+        }
+
         #endregion
 
         #region Consumers
