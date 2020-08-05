@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Twino.Client.TMQ" Version="3.5.3" />
+      <PackageReference Include="Twino.Client.TMQ" Version="3.5.5" />
     </ItemGroup>
 
 </Project>
