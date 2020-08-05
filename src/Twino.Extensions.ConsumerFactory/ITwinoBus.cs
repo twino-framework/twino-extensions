@@ -1,4 +1,4 @@
-using Twino.Client.TMQ.Connectors;
+using Twino.Client.TMQ.Bus;
 
 namespace Twino.Extensions.ConsumerFactory
 {
