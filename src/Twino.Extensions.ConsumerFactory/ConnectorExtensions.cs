@@ -113,6 +113,9 @@ namespace Twino.Extensions.ConsumerFactory
             AddConsumersMicrosoftDI(services, connector, builder);
             services.AddSingleton(connector);
             services.AddSingleton(connector.Bus);
+            services.AddSingleton(connector.Bus.Direct);
+            services.AddSingleton(connector.Bus.Queue);
+            services.AddSingleton(connector.Bus.Route);
 
             return services;
         }
