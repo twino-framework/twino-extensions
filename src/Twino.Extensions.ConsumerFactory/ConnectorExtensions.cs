@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Twino.Client.TMQ.Connectors;
+using Twino.Extensions.ConsumerFactory.Internal;
 using Twino.Ioc;
 
 namespace Twino.Extensions.ConsumerFactory
@@ -25,7 +26,10 @@ namespace Twino.Extensions.ConsumerFactory
 
             AddConsumersTwino(services, connector, builder);
             services.AddSingleton(connector);
-            services.AddSingleton<ITwinoBus>(connector);
+            services.AddSingleton(connector.Bus);
+            services.AddSingleton(connector.Bus.Direct);
+            services.AddSingleton(connector.Bus.Queue);
+            services.AddSingleton(connector.Bus.Route);
 
             connector.Run();
             return services;
@@ -43,7 +47,12 @@ namespace Twino.Extensions.ConsumerFactory
 
             AddConsumersTwino(services, connector, builder);
             services.AddSingleton(connector);
-            services.AddSingleton<ITwinoBus<TIdentifier>>(connector);
+
+            TwinoBus<TIdentifier> bus = (TwinoBus<TIdentifier>) connector.Bus;
+            services.AddSingleton<ITwinoBus<TIdentifier>>(bus);
+            services.AddSingleton<ITwinoDirectBus<TIdentifier>>((TwinoDirectBus<TIdentifier>) bus.Direct);
+            services.AddSingleton<ITwinoQueueBus<TIdentifier>>((TwinoQueueBus<TIdentifier>) bus.Queue);
+            services.AddSingleton<ITwinoRouteBus<TIdentifier>>((TwinoRouteBus<TIdentifier>) bus.Route);
 
             connector.Run();
             return services;
@@ -54,7 +63,7 @@ namespace Twino.Extensions.ConsumerFactory
             foreach (Tuple<ImplementationType, Type> pair in builder.AssembyConsumers)
             {
                 IEnumerable<Type> types = connector.Observer
-                                                   .RegisterAssemblyConsumers(() => new TwinoIocConsumerFactory((IServiceContainer)services, pair.Item1),
+                                                   .RegisterAssemblyConsumers(() => new TwinoIocConsumerFactory((IServiceContainer) services, pair.Item1),
                                                                               pair.Item2);
 
                 foreach (Type type in types)
@@ -64,7 +73,7 @@ namespace Twino.Extensions.ConsumerFactory
             foreach (Tuple<ImplementationType, Type> pair in builder.IndividualConsumers)
             {
                 connector.Observer.RegisterConsumer(pair.Item2,
-                                                    () => new TwinoIocConsumerFactory((IServiceContainer)services, pair.Item1));
+                                                    () => new TwinoIocConsumerFactory((IServiceContainer) services, pair.Item1));
                 AddConsumerIntoContainer(services, pair.Item1, pair.Item2);
             }
         }
@@ -103,7 +112,10 @@ namespace Twino.Extensions.ConsumerFactory
 
             AddConsumersMicrosoftDI(services, connector, builder);
             services.AddSingleton(connector);
-            services.AddSingleton<ITwinoBus>(connector);
+            services.AddSingleton(connector.Bus);
+            services.AddSingleton(connector.Bus.Direct);
+            services.AddSingleton(connector.Bus.Queue);
+            services.AddSingleton(connector.Bus.Route);
 
             return services;
         }
@@ -120,7 +132,12 @@ namespace Twino.Extensions.ConsumerFactory
 
             AddConsumersMicrosoftDI(services, connector, builder);
             services.AddSingleton(connector);
-            services.AddSingleton<ITwinoBus<TIdentifier>>(connector);
+
+            TwinoBus<TIdentifier> bus = (TwinoBus<TIdentifier>) connector.Bus;
+            services.AddSingleton<ITwinoBus<TIdentifier>>(bus);
+            services.AddSingleton<ITwinoDirectBus<TIdentifier>>((TwinoDirectBus<TIdentifier>) bus.Direct);
+            services.AddSingleton<ITwinoQueueBus<TIdentifier>>((TwinoQueueBus<TIdentifier>) bus.Queue);
+            services.AddSingleton<ITwinoRouteBus<TIdentifier>>((TwinoRouteBus<TIdentifier>) bus.Route);
 
             return services;
         }
