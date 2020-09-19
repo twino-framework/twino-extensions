@@ -5,7 +5,7 @@ using Twino.Client.TMQ.Connectors;
 using Twino.Ioc;
 using Twino.Protocols.TMQ;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     /// <summary>
     /// Twino Connector Builder

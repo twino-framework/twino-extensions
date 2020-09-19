@@ -4,7 +4,7 @@ using Twino.Client.TMQ;
 using Twino.Client.TMQ.Connectors;
 using Twino.Protocols.TMQ;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     /// <summary>
     /// Wrapper class for event action.

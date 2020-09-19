@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Sample.ConsumerFactory.Models;
 using Sample.ConsumerFactory.Services;
 using Twino.Client.TMQ.Connectors;
+using Twino.Extensions.Bus;
 using Twino.Extensions.ConsumerFactory;
 using Twino.Ioc;
 

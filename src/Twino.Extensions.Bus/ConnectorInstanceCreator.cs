@@ -1,7 +1,7 @@
 using System;
 using Twino.Client.TMQ;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     internal class ConnectorInstanceCreator
     {
