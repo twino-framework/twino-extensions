@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Twino.Client.TMQ.Connectors;
 using Twino.Extensions.Bus.Internal;
-using Twino.Extensions.ConsumerFactory;
 using Twino.Ioc;
 
 namespace Twino.Extensions.Bus

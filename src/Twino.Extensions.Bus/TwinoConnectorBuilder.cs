@@ -297,7 +297,7 @@ namespace Twino.Extensions.Bus
         /// </summary>
         private void ConfigureConnector(TmqStickyConnector connector)
         {
-            connector.AutoJoinConsumerChannels = _autoJoin;
+            connector.AutoSubscribe = _autoJoin;
             connector.DisconnectionOnAutoJoinFailure = _disconnectOnJoinFailure;
             if (_contentSerializer != null)
                 connector.ContentSerializer = _contentSerializer;

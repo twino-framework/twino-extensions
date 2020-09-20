@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Sample.ConsumerFactory.Models;
 using Sample.ConsumerFactory.Services;
-using Twino.Client.TMQ.Connectors;
+using Twino.Client.TMQ.Bus;
 using Twino.Extensions.Bus;
-using Twino.Extensions.ConsumerFactory;
 using Twino.Ioc;
 
 namespace Sample.ConsumerFactory
@@ -21,19 +20,18 @@ namespace Sample.ConsumerFactory
             services.UseTwinoBus(cfg => cfg.AddHost("tmq://127.0.0.1:22200")
                                            .AddTransientConsumers(typeof(Program)));
 
-            /*
-            ITwinoBus bus = await services.Get<ITwinoBus>();
+
+            ITwinoBus bus = services.Get<ITwinoBus>();
 
             //push to a queue
-            await bus.PushJson(new ModelA(), false);
+            await bus.Queue.PushJson(new ModelA());
 
             //publish to a router
-            await bus.PublishJson(new ModelA());
+            await bus.Route.PublishJson(new ModelA());
 
             //to a direct target, ModelA required DirectTarget attribute
-            await bus.SendDirectJsonAsync(new ModelA());
+            await bus.Direct.SendJson(new ModelA());
 
-*/
             Console.ReadLine();
         }
     }

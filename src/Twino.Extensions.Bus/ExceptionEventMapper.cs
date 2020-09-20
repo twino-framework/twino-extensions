@@ -28,7 +28,7 @@ namespace Twino.Extensions.Bus
         /// Event action mapper
         /// </summary>
         /// <returns></returns>
-        public void Action(IConnector<TmqClient, TmqMessage> c, Exception e)
+        public void Action(IConnector<TmqClient, TwinoMessage> c, Exception e)
         {
             _action(e);
         }

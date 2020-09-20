@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Twino.Client.TMQ" Version="3.7.0" />
+      <PackageReference Include="Twino.Client.TMQ" Version="4.0.1-beta" />
     </ItemGroup>
 
     <ItemGroup>
