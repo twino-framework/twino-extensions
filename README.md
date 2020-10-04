@@ -1,13 +1,10 @@
 # Twino Extensions
 
+[![NuGet](https://img.shields.io/nuget/v/Twino.Extensions.Bus?label=consumer bus%20nuget)](https://www.nuget.org/packages/Twino.Extensions.Bus)
+[![NuGet](https://img.shields.io/nuget/v/Twino.Extensions.Http?label=http%20factory%20nuget)](https://www.nuget.org/packages/Twino.Extensions.Http)
+[![NuGet](https://img.shields.io/nuget/v/Twino.Extensions.Data?label=http%20factory%20nuget)](https://www.nuget.org/packages/Twino.Extensions.Data)
+
 Twino Extensions project has useful extensions for twino projects.
-
-## NuGet Packages
-
-**[Twino Extensions ConsumerFactory](https://www.nuget.org/packages/Twino.Extensions.ConsumerFactory)**<br>
-**[Twino Extensions Http](https://www.nuget.org/packages/Twino.Extensions.Http)**<br>
-**[Twino Extensions Data](https://www.nuget.org/packages/Twino.Extensions.Data)**<br>
-
 
 ### Twino Extensions Consumer Factory
 
@@ -16,6 +13,8 @@ Consumer Factory is an extension for connecting Twino MQ easily. It creates a Tm
     services.UseTwinoBus(cfg => cfg.AddHost("tmq://127.0.0.1:22200")
                                    .AddTransientConsumers(typeof(Program)));
 
+
+NOTE: The usage above is for Twino IOC. If you're using Twino.Extensions.Bus with Microsoft Dependency Injection, you need to use both AddTwinoBus and UseTwinoBus
 
 ### Twino Extensions Http
 
@@ -95,3 +94,10 @@ Here is a quick example:
     
     //get db context from pool
     MyContext context = container.Get<MyContext>(scope);
+
+
+## Thanks
+
+Thanks to JetBrains for open source license to use on this project.
+
+[![jetbrains](https://user-images.githubusercontent.com/21208762/90192662-10043700-ddcc-11ea-9533-c43b99801d56.png)](https://www.jetbrains.com/?from=twino-framework)
