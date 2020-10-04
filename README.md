@@ -1,6 +1,6 @@
 # Twino Extensions
 
-[![NuGet](https://img.shields.io/nuget/v/Twino.Extensions.Bus?label=consumer bus%20nuget)](https://www.nuget.org/packages/Twino.Extensions.Bus)
+[![NuGet](https://img.shields.io/nuget/v/Twino.Extensions.Bus?label=consumer%20bus%20nuget)](https://www.nuget.org/packages/Twino.Extensions.Bus)
 [![NuGet](https://img.shields.io/nuget/v/Twino.Extensions.Http?label=http%20factory%20nuget)](https://www.nuget.org/packages/Twino.Extensions.Http)
 [![NuGet](https://img.shields.io/nuget/v/Twino.Extensions.Data?label=http%20factory%20nuget)](https://www.nuget.org/packages/Twino.Extensions.Data)
 
