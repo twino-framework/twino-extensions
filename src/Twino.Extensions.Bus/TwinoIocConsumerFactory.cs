@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Twino.Client.TMQ;
 using Twino.Ioc;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     internal class TwinoIocConsumerFactory : IConsumerFactory
     {

@@ -1,9 +1,9 @@
 using System;
 using Twino.Client.TMQ;
 using Twino.Client.TMQ.Connectors;
-using Twino.Extensions.ConsumerFactory.Internal;
+using Twino.Extensions.Bus.Internal;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     /// <summary>
     /// Used for using multiple twino bus in same provider.

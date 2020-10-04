@@ -2,30 +2,31 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <Title>Twino.Extensions.ConsumerFactory</Title>
-        <Product>Twino.Extensions.ConsumerFactory</Product>
-        <Description>Twino Client Message Consumer extension for Twino IOC</Description>
-        <PackageTags>twino,tmq,message,consumer,channel,direct</PackageTags>
-        <AssemblyVersion>3.7.0</AssemblyVersion>
-        <FileVersion>3.7.0</FileVersion>
-        <PackageVersion>3.7.0</PackageVersion>
+        <Title>Twino.Extensions.Bus</Title>
+        <Product>Twino.Extensions.Bus</Product>
+        <Description>Twino MQ Bus extension for Twino IOC</Description>
+        <PackageTags>twino,tmq,consumer,bus</PackageTags>
+        <AssemblyVersion>4.0.4</AssemblyVersion>
+        <FileVersion>4.0.4</FileVersion>
+        <PackageVersion>4.0.4</PackageVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Authors>Mehmet Helvacıköylü;Emre Hızlı</Authors>
         <PackageProjectUrl>https://github.com/twino-framework/twino-extensions</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/twino-framework/twino-extensions/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/twino-framework/twino-extensions</RepositoryUrl>
+        <RootNamespace>Twino.Extensions.Bus</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <DocumentationFile>bin\Debug\Twino.Extensions.ConsumerFactory.xml</DocumentationFile>
+        <DocumentationFile>bin\Debug\Twino.Extensions.Bus.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DocumentationFile>bin\Release\Twino.Extensions.ConsumerFactory.xml</DocumentationFile>
+        <DocumentationFile>bin\Release\Twino.Extensions.Bus.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Twino.Client.TMQ" Version="3.7.0" />
+        <PackageReference Include="Twino.Client.TMQ" Version="4.0.4" />
         <PackageReference Include="Twino.Ioc" Version="3.4.2" />
     </ItemGroup>
 

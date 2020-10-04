@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Twino.Client.TMQ;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     internal class MicrosoftDependencyConsumerFactory : IConsumerFactory
     {

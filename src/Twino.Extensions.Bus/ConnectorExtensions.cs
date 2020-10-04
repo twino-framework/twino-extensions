@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Twino.Client.TMQ.Connectors;
-using Twino.Extensions.ConsumerFactory.Internal;
+using Twino.Extensions.Bus.Internal;
 using Twino.Ioc;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     /// <summary>
     /// Twino Connector implementations

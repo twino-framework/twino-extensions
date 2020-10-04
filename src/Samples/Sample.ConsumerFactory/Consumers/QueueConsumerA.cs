@@ -16,7 +16,7 @@ namespace Sample.ConsumerFactory.Consumers
             _sampleService = sampleService;
         }
 
-        public Task Consume(TmqMessage message, ModelA model, TmqClient client)
+        public Task Consume(TwinoMessage message, ModelA model, TmqClient client)
         {
             Console.WriteLine("Model A Consumed");
             return Task.CompletedTask;

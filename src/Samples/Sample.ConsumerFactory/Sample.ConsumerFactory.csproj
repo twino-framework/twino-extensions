@@ -6,11 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Twino.Extensions.ConsumerFactory\Twino.Extensions.ConsumerFactory.csproj" />
+      <PackageReference Include="Twino.Client.TMQ" Version="4.0.4" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Twino.Client.TMQ" Version="3.7.0" />
+      <ProjectReference Include="..\..\Twino.Extensions.Bus\Twino.Extensions.Bus.csproj" />
     </ItemGroup>
 
 </Project>

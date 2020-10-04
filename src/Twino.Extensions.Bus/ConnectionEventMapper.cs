@@ -2,7 +2,7 @@ using System;
 using Twino.Client.TMQ;
 using Twino.Client.TMQ.Connectors;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     /// <summary>
     /// Mapper class for event action.

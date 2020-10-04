@@ -5,7 +5,7 @@ using Twino.Client.TMQ.Connectors;
 using Twino.Ioc;
 using Twino.Protocols.TMQ;
 
-namespace Twino.Extensions.ConsumerFactory
+namespace Twino.Extensions.Bus
 {
     /// <summary>
     /// Twino Connector Builder
@@ -297,7 +297,7 @@ namespace Twino.Extensions.ConsumerFactory
         /// </summary>
         private void ConfigureConnector(TmqStickyConnector connector)
         {
-            connector.AutoJoinConsumerChannels = _autoJoin;
+            connector.AutoSubscribe = _autoJoin;
             connector.DisconnectionOnAutoJoinFailure = _disconnectOnJoinFailure;
             if (_contentSerializer != null)
                 connector.ContentSerializer = _contentSerializer;

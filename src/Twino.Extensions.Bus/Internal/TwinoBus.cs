@@ -1,7 +1,7 @@
 using Twino.Client.TMQ.Bus;
 using Twino.Client.TMQ.Connectors;
 
-namespace Twino.Extensions.ConsumerFactory.Internal
+namespace Twino.Extensions.Bus.Internal
 {
     internal class TwinoBus<TIdentifier> : TwinoBus, ITwinoBus<TIdentifier>
     {
