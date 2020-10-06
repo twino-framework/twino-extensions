@@ -19,7 +19,7 @@ namespace Twino.Extensions.Bus
         /// </summary>
         public static ITwinoServiceCollection UseTwinoBus(this ITwinoServiceCollection services, Action<TwinoConnectorBuilder> config)
         {
-            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder(services);
             config(builder);
 
             TmqStickyConnector connector = builder.Build();
@@ -40,7 +40,7 @@ namespace Twino.Extensions.Bus
         /// </summary>
         public static ITwinoServiceCollection UseTwinoBus<TIdentifier>(this ITwinoServiceCollection services, Action<TwinoConnectorBuilder> config)
         {
-            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder(services);
             config(builder);
 
             TmqStickyConnector<TIdentifier> connector = builder.Build<TIdentifier>();
@@ -105,7 +105,7 @@ namespace Twino.Extensions.Bus
         /// </summary>
         public static IServiceCollection AddTwinoBus(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
         {
-            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder(services);
             config(builder);
 
             TmqStickyConnector connector = builder.Build();
@@ -125,7 +125,7 @@ namespace Twino.Extensions.Bus
         /// </summary>
         public static IServiceCollection AddTwinoBus<TIdentifier>(this IServiceCollection services, Action<TwinoConnectorBuilder> config)
         {
-            TwinoConnectorBuilder builder = new TwinoConnectorBuilder();
+            TwinoConnectorBuilder builder = new TwinoConnectorBuilder(services);
             config(builder);
 
             TmqStickyConnector<TIdentifier> connector = builder.Build<TIdentifier>();

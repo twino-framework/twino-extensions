@@ -21,8 +21,8 @@ namespace Twino.Extensions.Bus
         private string _name = "unnamed";
         private string _token;
         private TimeSpan _reconnectInterval = TimeSpan.FromSeconds(1);
-        private bool _autoJoin = true;
-        private bool _disconnectOnJoinFailure = true;
+        private bool _autoSubscribe = true;
+        private bool _disconnectOnSubscribeFailure = true;
         private IMessageContentSerializer _contentSerializer;
 
         private readonly List<string> _hosts = new List<string>();
@@ -39,7 +39,24 @@ namespace Twino.Extensions.Bus
 
         internal List<Tuple<ImplementationType, Type>> AssembyConsumers => _assembyConsumers;
 
+        private readonly object _serviceContainer;
+
         #endregion
+
+        /// <summary>
+        /// Creates Twino Connector Builder without IOC implementation
+        /// </summary>
+        public TwinoConnectorBuilder()
+        {
+        }
+
+        /// <summary>
+        /// Creates Twino Connector Builder with IOC implementation
+        /// </summary>
+        internal TwinoConnectorBuilder(object serviceContainer)
+        {
+            _serviceContainer = serviceContainer;
+        }
 
         #region Client Info
 
@@ -114,23 +131,23 @@ namespace Twino.Extensions.Bus
         }
 
         /// <summary>
-        /// If true, connector joins all consuming channels.
-        /// If false, you should join channels manually.
+        /// If true, connector subscribes all consuming queues automatically right after connection established.
+        /// If false, you need to subscribe manually
         /// Default is true.
         /// </summary>
-        public TwinoConnectorBuilder AutoJoinConsumerChannels(bool value)
+        public TwinoConnectorBuilder AutoSubscribe(bool value)
         {
-            _autoJoin = value;
+            _autoSubscribe = value;
             return this;
         }
 
         /// <summary>
-        /// If true, disconnected when any of auto channel join request fails.
+        /// If true, disconnected when any of auto subscribe request fails.
         /// Default is true.
         /// </summary>
-        public TwinoConnectorBuilder DisconnectionOnAutoJoinFailure(bool value)
+        public TwinoConnectorBuilder DisconnectionOnAutoSubscribeFailure(bool value)
         {
-            _disconnectOnJoinFailure = value;
+            _disconnectOnSubscribeFailure = value;
             return this;
         }
 
@@ -279,7 +296,7 @@ namespace Twino.Extensions.Bus
         }
 
         /// <summary>
-        /// Builds new TmqStickyConnector with defined properties
+        /// Builds new TmqStickyConnector with defined properties.
         /// </summary>
         public TmqStickyConnector Build()
         {
@@ -288,17 +305,32 @@ namespace Twino.Extensions.Bus
 
             _connector = new TmqStickyConnector(_reconnectInterval, new ConnectorInstanceCreator(_id, _name, _type, _token, _enhance).CreateInstance);
             ConfigureConnector(_connector);
+            if (_serviceContainer == null)
+                RegisterConsumers(_connector);
+            
             return _connector;
         }
 
+        /// <summary>
+        /// Registers all consumers.
+        /// This method is called if implementation is done without ioc container.
+        /// </summary>
+        private void RegisterConsumers(TmqStickyConnector connector)
+        {
+            foreach (Tuple<ImplementationType, Type> pair in _assembyConsumers)
+                connector.Observer.RegisterAssemblyConsumers(pair.Item2);
+
+            foreach (Tuple<ImplementationType, Type> pair in _individualConsumers)
+                connector.Observer.RegisterConsumer(pair.Item2);
+        }
 
         /// <summary>
         /// Applies configurations on connector
         /// </summary>
         private void ConfigureConnector(TmqStickyConnector connector)
         {
-            connector.AutoSubscribe = _autoJoin;
-            connector.DisconnectionOnAutoJoinFailure = _disconnectOnJoinFailure;
+            connector.AutoSubscribe = _autoSubscribe;
+            connector.DisconnectionOnAutoJoinFailure = _disconnectOnSubscribeFailure;
             if (_contentSerializer != null)
                 connector.ContentSerializer = _contentSerializer;
 
