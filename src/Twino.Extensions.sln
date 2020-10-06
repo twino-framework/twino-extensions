@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Http", "Samples\Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twino.Extensions.Bus", "Twino.Extensions.Bus\Twino.Extensions.Bus.csproj", "{A44A6338-B57C-4830-83DE-F5C36C3746B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.ConsumerFactory", "Samples\Sample.ConsumerFactory\Sample.ConsumerFactory.csproj", "{ADA16EF6-757A-4C93-9B51-FF9DD03F20D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Bus", "Samples\Sample.Bus\Sample.Bus.csproj", "{ADA16EF6-757A-4C93-9B51-FF9DD03F20D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
